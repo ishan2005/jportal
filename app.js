@@ -39,10 +39,13 @@ async function gistRead() {
   const res = await fetch(GIST_URL, {
     headers: { 'Authorization': `token ${GH_TOKEN}`, 'Accept': 'application/vnd.github+json' }
   });
-  if (!res.ok) throw new Error('Failed to read data');
+  if (!res.ok) throw new Error(`GitHub API error: ${res.status}`);
   const json = await res.json();
-  const raw = json.files['jportal-db.json']?.content || '{}';
-  return JSON.parse(raw);
+  let raw = (json.files['jportal-db.json']?.content || '{}');
+  // Strip UTF-8 BOM if present (PowerShell sometimes adds it)
+  raw = raw.replace(/^\uFEFF/, '').trim();
+  if (!raw || raw === '') raw = '{}';
+  try { return JSON.parse(raw); } catch(e) { return {}; }
 }
 
 async function gistWrite(data) {
