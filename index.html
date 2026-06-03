@@ -1,0 +1,685 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>JP Portal - JIIT Student Portal</title>
+  <meta name="description" content="JP Portal - Student portal for Jaypee Institute of Information Technology"/>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="styles.css"/>
+</head>
+<body>
+
+<!-- ══════════ LOGIN PAGE ══════════ -->
+<div id="login-page" class="page active">
+  <!-- Header -->
+  <header class="login-header">
+    <div class="login-header-inner">
+      <h1 class="login-header-title">Modern JIIT WebKiosk</h1>
+      <button class="theme-btn" onclick="toggleTheme()" id="theme-btn" title="Toggle theme">
+        <svg id="theme-icon-sun" class="theme-icon hidden" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
+        <svg id="theme-icon-moon" class="theme-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+      </button>
+    </div>
+  </header>
+
+  <!-- Main -->
+  <main class="login-main">
+    <div class="login-body">
+      <!-- Left panel (desktop only) -->
+      <div class="login-left-panel">
+        <img src="https://cdn.jsdelivr.net/gh/J2V-k/jportal-vhost@main/public/pwa-icons/wheel.svg" alt="JP Portal Logo" class="login-logo-img" onerror="this.style.display='none'"/>
+        <div class="login-left-text">
+          <h2>JP Portal</h2>
+          <p>JIIT Student Dashboard</p>
+        </div>
+      </div>
+
+      <!-- Login Form -->
+      <div class="login-form-wrap">
+        <div class="login-card">
+          <div class="login-card-inner">
+            <div class="login-intro">
+              <h2 class="login-title">Welcome back to WebKiosk</h2>
+              <p class="login-sub">Sign in with your enrollment number and password to access attendance, grades, timetable, and more.</p>
+            </div>
+            <div class="login-cache-hint">
+              <p class="login-cache-text">Sign in to access your data.</p>
+            </div>
+
+            <div id="login-error-box" class="login-error hidden">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+              <span id="login-error-msg">Invalid credentials.</span>
+            </div>
+
+            <form id="login-form" onsubmit="handleLogin(event)" novalidate>
+              <div class="form-field">
+                <label class="field-label">Enrollment Number</label>
+                <div class="field-wrap">
+                  <svg class="field-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+                  <input type="text" id="enroll-input" class="field-input" placeholder="Enter enrollment number" autocomplete="username" required/>
+                </div>
+              </div>
+              <div class="form-field">
+                <label class="field-label">Password</label>
+                <div class="field-wrap">
+                  <svg class="field-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+                  <input type="password" id="pwd-input" class="field-input field-input-pw" placeholder="Enter password" autocomplete="current-password" required/>
+                  <button type="button" class="pw-toggle" onclick="togglePw()" id="pw-toggle-btn">
+                    <svg id="eye-show" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+                    <svg id="eye-hide" class="hidden" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"/><line x1="1" y1="1" x2="23" y2="23"/></svg>
+                  </button>
+                </div>
+              </div>
+              <button type="submit" class="btn-signin" id="signin-btn">
+                <span id="signin-text">Sign In</span>
+                <div id="signin-spinner" class="spin hidden"></div>
+              </button>
+            </form>
+
+            <!-- Divider -->
+            <div class="login-divider">
+              <div class="divider-line"></div>
+              <span class="divider-text">Or continue without login</span>
+              <div class="divider-line"></div>
+            </div>
+
+            <div class="login-extras">
+              <a href="#/academic-calendar" class="extra-btn extra-btn-blue" onclick="navigateTo('academic-calendar')">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+                Academic Calendar
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <!-- Footer -->
+  <footer class="login-footer">
+    <p>Created with ❤️ for JIIT students only</p>
+    <p>Not liable for attendance-related emotional damage 😄</p>
+  </footer>
+</div>
+
+<!-- ══════════ APP ══════════ -->
+<div id="app-page" class="page hidden">
+
+  <!-- STICKY HEADER -->
+  <header class="app-header" id="app-header">
+    <div class="app-header-inner">
+      <div class="app-header-left">
+        <h1 class="app-header-title">JP Portal</h1>
+      </div>
+      <div class="app-header-right">
+        <button class="icon-btn" onclick="toggleTheme()" title="Toggle theme" id="app-theme-btn">
+          <svg id="app-sun" class="hidden" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
+          <svg id="app-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+        </button>
+        <div class="divider-v"></div>
+        <button class="icon-btn" onclick="handleLogout()" title="Logout">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- DESKTOP SIDEBAR -->
+  <aside class="sidebar" id="sidebar">
+    <div class="sidebar-brand">
+      <img src="https://cdn.jsdelivr.net/gh/J2V-k/jportal-vhost@main/public/logo.png" alt="Logo" class="sidebar-logo-img" onerror="this.style.display='none'"/>
+      <span class="sidebar-brand-name">JP PORTAL</span>
+    </div>
+    <nav class="sidebar-nav">
+      <a href="#" class="sidebar-link active" data-page="attendance" onclick="navigateTo('attendance',this)">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 11 12 14 22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>
+        Attendance
+      </a>
+      <a href="#" class="sidebar-link" data-page="grades" onclick="navigateTo('grades',this)">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>
+        Grades
+      </a>
+      <a href="#" class="sidebar-link" data-page="gpa" onclick="navigateTo('gpa',this)">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+        GPA Calculator
+      </a>
+      <a href="#" class="sidebar-link" data-page="exams" onclick="navigateTo('exams',this)">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
+        Exams
+      </a>
+      <a href="#" class="sidebar-link" data-page="subjects" onclick="navigateTo('subjects',this)">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>
+        Subjects
+      </a>
+      <a href="#" class="sidebar-link" data-page="timetable" onclick="navigateTo('timetable',this)">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+        Timetable
+      </a>
+      <a href="#" class="sidebar-link" data-page="profile" onclick="navigateTo('profile',this)">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+        Profile
+      </a>
+    </nav>
+  </aside>
+
+  <!-- MAIN CONTENT AREA -->
+  <div class="main-area">
+
+    <!-- ── ATTENDANCE ── -->
+    <div id="page-attendance" class="content-page active">
+      <div class="page-toolbar">
+        <select class="toolbar-select" id="att-sem-select" onchange="onAttSemChange()">
+          <option>Select semester</option>
+        </select>
+        <input type="number" class="toolbar-input" id="att-goal" value="75" min="1" max="100" placeholder="Goal %" title="Attendance Goal %"/>
+        <button class="toolbar-btn" onclick="cycleSort()" id="sort-btn" title="Sort">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16"><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><line x1="3" y1="6" x2="3.01" y2="6"/><line x1="3" y1="12" x2="3.01" y2="12"/><line x1="3" y1="18" x2="3.01" y2="18"/></svg>
+          <span class="toolbar-btn-label" id="sort-label">Default</span>
+        </button>
+        <button class="toolbar-btn" onclick="openAddAttModal()" title="Add Subject">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+          <span class="toolbar-btn-label">Add</span>
+        </button>
+      </div>
+
+      <!-- Tabs -->
+      <div class="tabs-bar" style="padding:0 12px;max-width:1440px;margin:0 auto;">
+        <div class="tabs-list grid2">
+          <button class="tab-trigger active" data-tab="att-overview" onclick="switchTab('att','overview',this)">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>
+            Overview
+          </button>
+          <button class="tab-trigger" data-tab="att-daily" onclick="switchTab('att','daily',this)">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+            Day-to-Day
+          </button>
+        </div>
+      </div>
+
+      <div id="att-overview" class="tab-content active" style="padding:12px;max-width:1440px;margin:0 auto;">
+        <div class="card-grid-2" id="att-cards-grid">
+          <div class="empty-state">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" width="40" height="40"><polyline points="9 11 12 14 22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>
+            <p>No attendance data yet. Click <b>Add</b> to add subjects.</p>
+          </div>
+        </div>
+      </div>
+      <div id="att-daily" class="tab-content" style="padding:12px;max-width:1440px;margin:0 auto;">
+        <div class="empty-state">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" width="40" height="40"><rect x="3" y="4" width="18" height="18" rx="2"/></svg>
+          <p>No daily data available yet.</p>
+        </div>
+      </div>
+
+      <!-- Info banner -->
+      <div class="info-banner mx-3" style="margin:12px;">
+        <div class="info-banner-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="20" height="20"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+        </div>
+        <div>
+          <p class="info-banner-title">Daily Attendance Update</p>
+          <p class="info-banner-sub">Attendance marked for today typically reflects on the portal by <strong>tomorrow morning</strong>.</p>
+        </div>
+      </div>
+      <div style="height:80px"></div>
+    </div>
+
+    <!-- ── GRADES ── -->
+    <div id="page-grades" class="content-page hidden">
+      <div class="content-section">
+        <div class="section-header">
+          <h2 class="section-title">Grades & Marks</h2>
+          <button class="btn-outline" onclick="openAddMarksModal()">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+            Add Marks
+          </button>
+        </div>
+        <div id="marks-list">
+          <div class="empty-state">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" width="40" height="40"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>
+            <p>No grades added yet. Click <b>Add Marks</b> to get started.</p>
+          </div>
+        </div>
+      </div>
+      <div style="height:80px"></div>
+    </div>
+
+    <!-- ── GPA CALCULATOR ── -->
+    <div id="page-gpa" class="content-page hidden">
+      <div style="max-width:900px;margin:0 auto;padding:12px;">
+        <div class="tabs-bar">
+          <div class="tabs-list grid2">
+            <button class="tab-trigger active" onclick="switchGpaTab('sgpa',this)">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>
+              SGPA Calculator
+            </button>
+            <button class="tab-trigger" onclick="switchGpaTab('cgpa',this)">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16"><path d="M22 10v6M2 10l10-5 10 5-10 5z"/><path d="M6 12v5c3 3 9 3 12 0v-5"/></svg>
+              CGPA Calculator
+            </button>
+          </div>
+        </div>
+
+        <!-- SGPA TAB -->
+        <div id="gpa-sgpa-tab" class="tab-content active" style="padding-top:16px;">
+          <div class="space-y-4">
+            <div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap;">
+              <select class="toolbar-select" id="sgpa-sem-select" onchange="onSgpaSemChange()" style="max-width:280px;">
+                <option value="">Choose your semester</option>
+              </select>
+              <button class="btn-outline" onclick="openAddSemModal()">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="14" height="14"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+                Add Semester
+              </button>
+            </div>
+
+            <div class="card-grid-2" id="sgpa-subjects-grid">
+              <div class="empty-state" style="grid-column:1/-1;">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" width="40" height="40"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>
+                <p>Add a semester and subjects to calculate SGPA.</p>
+                <button class="btn-outline" onclick="openAddSemModal()">Add Semester</button>
+              </div>
+            </div>
+
+            <!-- Results -->
+            <div class="result-grid" id="sgpa-results" style="display:none;">
+              <div class="result-card">
+                <div class="result-card-left">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16"><circle cx="12" cy="8" r="6"/><path d="M15.477 12.89 17 22l-5-3-5 3 1.523-9.11"/></svg>
+                  <span class="result-label">Calculated SGPA</span>
+                </div>
+                <span class="result-value" id="sgpa-display">—</span>
+              </div>
+              <div class="result-card">
+                <div class="result-card-left">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16"><polyline points="22 7 13.5 15.5 8.5 10.5 2 17"/><polyline points="16 7 22 7 22 13"/></svg>
+                  <span class="result-label">Projected CGPA</span>
+                </div>
+                <span class="result-value" id="proj-cgpa-display">—</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- CGPA TAB -->
+        <div id="gpa-cgpa-tab" class="tab-content hidden" style="padding-top:16px;">
+          <div class="space-y-4">
+            <!-- Target + Required -->
+            <div class="card-grid-2">
+              <div class="result-card">
+                <div class="result-card-left">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></svg>
+                  <span class="result-label">Target CGPA (next)</span>
+                </div>
+                <input type="number" id="target-cgpa-input" class="result-input" min="0" max="10" step="0.01" placeholder="e.g. 8.50" oninput="updateCGPACalc()"/>
+              </div>
+              <div class="result-card">
+                <div class="result-card-left">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16"><circle cx="12" cy="8" r="6"/><path d="M15.477 12.89 17 22l-5-3-5 3 1.523-9.11"/></svg>
+                  <span class="result-label">Required SGPA (next)</span>
+                </div>
+                <span class="result-value" id="req-sgpa-display">—</span>
+              </div>
+            </div>
+
+            <!-- OR divider -->
+            <div class="or-divider">
+              <div class="or-line"></div>
+              <span class="or-text">OR</span>
+              <div class="or-line"></div>
+            </div>
+
+            <!-- Long-term planner -->
+            <div style="display:flex;align-items:center;justify-content:space-between;">
+              <h3 class="planner-title">Long-term Planner</h3>
+            </div>
+
+            <div class="card-grid-2" id="cgpa-semesters-grid">
+              <!-- Filled dynamically -->
+            </div>
+
+            <div style="display:flex;flex-wrap:wrap;gap:12px;align-items:center;margin-top:8px;">
+              <button class="btn-outline" onclick="addCgpaSemRow()" id="add-sem-btn">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+                Add Semester
+              </button>
+              <div class="result-card" style="flex:1;min-width:200px;">
+                <div class="result-card-left">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16"><circle cx="12" cy="8" r="6"/><path d="M15.477 12.89 17 22l-5-3-5 3 1.523-9.11"/></svg>
+                  <span class="result-label">Calculated CGPA</span>
+                </div>
+                <span class="result-value" id="cgpa-display">—</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div style="height:80px"></div>
+    </div>
+
+    <!-- ── EXAMS ── -->
+    <div id="page-exams" class="content-page hidden">
+      <div class="content-section">
+        <div class="section-header">
+          <h2 class="section-title">Exam Schedule</h2>
+          <button class="btn-outline" onclick="openAddExamModal()">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+            Add Exam
+          </button>
+        </div>
+        <div id="exams-list">
+          <div class="empty-state">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" width="40" height="40"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/></svg>
+            <p>No exam schedule added yet.</p>
+          </div>
+        </div>
+      </div>
+      <div style="height:80px"></div>
+    </div>
+
+    <!-- ── SUBJECTS ── -->
+    <div id="page-subjects" class="content-page hidden">
+      <div class="content-section">
+        <div class="section-header">
+          <h2 class="section-title">Registered Subjects</h2>
+          <button class="btn-outline" onclick="openAddSubjectModal()">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+            Add Subject
+          </button>
+        </div>
+        <div id="subjects-list">
+          <div class="empty-state">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" width="40" height="40"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>
+            <p>No subjects added yet.</p>
+          </div>
+        </div>
+      </div>
+      <div style="height:80px"></div>
+    </div>
+
+    <!-- ── TIMETABLE ── -->
+    <div id="page-timetable" class="content-page hidden">
+      <div class="content-section">
+        <div class="section-header">
+          <h2 class="section-title">Weekly Timetable</h2>
+          <button class="btn-outline" onclick="openAddTTModal()">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+            Add Class
+          </button>
+        </div>
+        <div id="tt-grid">
+          <div class="empty-state">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" width="40" height="40"><rect x="3" y="4" width="18" height="18" rx="2"/></svg>
+            <p>No timetable entries yet.</p>
+          </div>
+        </div>
+      </div>
+      <div style="height:80px"></div>
+    </div>
+
+    <!-- ── PROFILE ── -->
+    <div id="page-profile" class="content-page hidden">
+      <div class="content-section">
+        <div class="profile-card">
+          <div class="profile-avatar" id="profile-avatar">--</div>
+          <div class="profile-info">
+            <h2 class="profile-name">Student</h2>
+            <p class="profile-id" id="profile-enroll-id">--</p>
+            <p class="profile-inst">Jaypee Institute of Information Technology</p>
+          </div>
+        </div>
+
+        <!-- DATA SYNC CARD -->
+        <div class="sync-card">
+          <div class="sync-card-header">
+            <div class="sync-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="20" height="20"><polyline points="1 4 1 10 7 10"/><polyline points="23 20 23 14 17 14"/><path d="M20.49 9A9 9 0 0 0 5.64 5.64L1 10m22 4l-4.64 4.36A9 9 0 0 1 3.51 15"/></svg>
+            </div>
+            <div>
+              <p class="sync-title">Data Sync</p>
+              <p class="sync-sub">Export your data to share with friends, or import data received from someone.</p>
+            </div>
+          </div>
+          <div class="sync-actions">
+            <button class="btn-export" onclick="exportData()">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+              Export Data
+            </button>
+            <button class="btn-import" onclick="document.getElementById('import-file-input').click()">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+              Import Data
+            </button>
+          </div>
+          <p class="sync-note">📤 <b>Export</b> → downloads <code>jportal-data.json</code> · Share this file · Recipient clicks <b>Import</b> → all data appears instantly</p>
+        </div>
+
+        <div class="profile-actions">
+          <button class="btn-destructive" onclick="handleLogout()">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+            Logout
+          </button>
+        </div>
+      </div>
+      <div style="height:80px"></div>
+    </div>
+
+  </div><!-- end main-area -->
+
+  <!-- MOBILE BOTTOM NAV -->
+  <nav class="mobile-nav">
+    <a href="#" class="mobile-nav-item active" data-page="attendance" onclick="navigateTo('attendance',this)">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="20" height="20"><polyline points="9 11 12 14 22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>
+      <span>Attendance</span>
+    </a>
+    <a href="#" class="mobile-nav-item" data-page="grades" onclick="navigateTo('grades',this)">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="20" height="20"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>
+      <span>Grades</span>
+    </a>
+    <a href="#" class="mobile-nav-item" data-page="exams" onclick="navigateTo('exams',this)">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="20" height="20"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/></svg>
+      <span>Exams</span>
+    </a>
+    <a href="#" class="mobile-nav-item" data-page="subjects" onclick="navigateTo('subjects',this)">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="20" height="20"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>
+      <span>Subjects</span>
+    </a>
+    <a href="#" class="mobile-nav-item" data-page="profile" onclick="navigateTo('profile',this)">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="20" height="20"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+      <span>Profile</span>
+    </a>
+  </nav>
+
+</div><!-- end app-page -->
+
+<!-- ══════════ MODALS ══════════ -->
+
+<!-- Add Attendance Subject Modal -->
+<div id="modal-att" class="modal-bg hidden" onclick="closeModalBg(event,'modal-att')">
+  <div class="modal-box" onclick="event.stopPropagation()">
+    <div class="modal-hdr">
+      <h3 id="modal-att-title">Add Subject</h3>
+      <button class="modal-close" onclick="closeModal('modal-att')">✕</button>
+    </div>
+    <form onsubmit="saveAttEntry(event)" style="padding:16px 20px;">
+      <input type="hidden" id="att-edit-idx" value="-1"/>
+      <div class="form-field"><label class="field-label">Subject Name *</label>
+        <input type="text" id="att-sname" class="field-input" placeholder="e.g. Data Structures" required/></div>
+      <div class="form-field"><label class="field-label">Subject Code</label>
+        <input type="text" id="att-scode" class="field-input" placeholder="e.g. 18B11CS311"/></div>
+      <div class="form-row">
+        <div class="form-field"><label class="field-label">Total Classes *</label>
+          <input type="number" id="att-total" class="field-input" min="0" placeholder="40" required/></div>
+        <div class="form-field"><label class="field-label">Attended *</label>
+          <input type="number" id="att-attended" class="field-input" min="0" placeholder="32" required/></div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn-ghost" onclick="closeModal('modal-att')">Cancel</button>
+        <button type="submit" class="btn-primary">Save</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<!-- Add Semester (SGPA) Modal -->
+<div id="modal-addsem" class="modal-bg hidden" onclick="closeModalBg(event,'modal-addsem')">
+  <div class="modal-box" onclick="event.stopPropagation()">
+    <div class="modal-hdr">
+      <h3>Add Semester</h3>
+      <button class="modal-close" onclick="closeModal('modal-addsem')">✕</button>
+    </div>
+    <form onsubmit="saveSemester(event)" style="padding:16px 20px;">
+      <div class="form-field"><label class="field-label">Semester Name *</label>
+        <input type="text" id="sem-name-input" class="field-input" placeholder="e.g. 2024-ODD" required/></div>
+      <div class="modal-footer">
+        <button type="button" class="btn-ghost" onclick="closeModal('modal-addsem')">Cancel</button>
+        <button type="submit" class="btn-primary">Add Semester</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<!-- Add Subject to Semester Modal -->
+<div id="modal-addsubj" class="modal-bg hidden" onclick="closeModalBg(event,'modal-addsubj')">
+  <div class="modal-box" onclick="event.stopPropagation()">
+    <div class="modal-hdr">
+      <h3>Add Subject</h3>
+      <button class="modal-close" onclick="closeModal('modal-addsubj')">✕</button>
+    </div>
+    <form onsubmit="saveGpaSubject(event)" style="padding:16px 20px;">
+      <div class="form-field"><label class="field-label">Subject Name *</label>
+        <input type="text" id="gpa-sname" class="field-input" placeholder="e.g. Data Structures" required/></div>
+      <div class="form-row">
+        <div class="form-field"><label class="field-label">Subject Code</label>
+          <input type="text" id="gpa-scode" class="field-input" placeholder="e.g. 18B11CS311"/></div>
+        <div class="form-field"><label class="field-label">Credits *</label>
+          <input type="number" id="gpa-credits" class="field-input" min="1" max="10" step="0.5" placeholder="4" required/></div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn-ghost" onclick="closeModal('modal-addsubj')">Cancel</button>
+        <button type="submit" class="btn-primary">Add Subject</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<!-- Add Marks Modal -->
+<div id="modal-marks" class="modal-bg hidden" onclick="closeModalBg(event,'modal-marks')">
+  <div class="modal-box" onclick="event.stopPropagation()">
+    <div class="modal-hdr">
+      <h3 id="modal-marks-title">Add Marks</h3>
+      <button class="modal-close" onclick="closeModal('modal-marks')">✕</button>
+    </div>
+    <form onsubmit="saveMarksEntry(event)" style="padding:16px 20px;">
+      <input type="hidden" id="marks-edit-idx" value="-1"/>
+      <div class="form-field"><label class="field-label">Subject Name *</label>
+        <input type="text" id="marks-sname" class="field-input" placeholder="e.g. Data Structures" required/></div>
+      <div class="form-field"><label class="field-label">Subject Code</label>
+        <input type="text" id="marks-scode" class="field-input" placeholder="e.g. 18B11CS311"/></div>
+      <div class="form-row">
+        <div class="form-field"><label class="field-label">MST-1 (/20)</label>
+          <input type="number" id="marks-mst1" class="field-input" min="0" max="20" step="0.5" placeholder="0"/></div>
+        <div class="form-field"><label class="field-label">MST-2 (/20)</label>
+          <input type="number" id="marks-mst2" class="field-input" min="0" max="20" step="0.5" placeholder="0"/></div>
+      </div>
+      <div class="form-field"><label class="field-label">End Sem (/60)</label>
+        <input type="number" id="marks-endsem" class="field-input" min="0" max="60" step="0.5" placeholder="0"/></div>
+      <div class="modal-footer">
+        <button type="button" class="btn-ghost" onclick="closeModal('modal-marks')">Cancel</button>
+        <button type="submit" class="btn-primary">Save</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<!-- Add Exam Modal -->
+<div id="modal-exam" class="modal-bg hidden" onclick="closeModalBg(event,'modal-exam')">
+  <div class="modal-box" onclick="event.stopPropagation()">
+    <div class="modal-hdr">
+      <h3>Add Exam</h3>
+      <button class="modal-close" onclick="closeModal('modal-exam')">✕</button>
+    </div>
+    <form onsubmit="saveExamEntry(event)" style="padding:16px 20px;">
+      <div class="form-field"><label class="field-label">Subject *</label>
+        <input type="text" id="exam-subj" class="field-input" required/></div>
+      <div class="form-row">
+        <div class="form-field"><label class="field-label">Date *</label>
+          <input type="date" id="exam-date" class="field-input" required/></div>
+        <div class="form-field"><label class="field-label">Time</label>
+          <input type="text" id="exam-time" class="field-input" placeholder="9:00 AM"/></div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn-ghost" onclick="closeModal('modal-exam')">Cancel</button>
+        <button type="submit" class="btn-primary">Save</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<!-- Add Subject to Registry Modal -->
+<div id="modal-subject" class="modal-bg hidden" onclick="closeModalBg(event,'modal-subject')">
+  <div class="modal-box" onclick="event.stopPropagation()">
+    <div class="modal-hdr">
+      <h3>Add Subject</h3>
+      <button class="modal-close" onclick="closeModal('modal-subject')">✕</button>
+    </div>
+    <form onsubmit="saveSubjectEntry(event)" style="padding:16px 20px;">
+      <div class="form-field"><label class="field-label">Subject Name *</label>
+        <input type="text" id="subj-name" class="field-input" required/></div>
+      <div class="form-row">
+        <div class="form-field"><label class="field-label">Code</label>
+          <input type="text" id="subj-code" class="field-input"/></div>
+        <div class="form-field"><label class="field-label">Credits</label>
+          <input type="number" id="subj-credits" class="field-input" min="0" step="0.5"/></div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn-ghost" onclick="closeModal('modal-subject')">Cancel</button>
+        <button type="submit" class="btn-primary">Save</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<!-- Add Timetable Modal -->
+<div id="modal-tt" class="modal-bg hidden" onclick="closeModalBg(event,'modal-tt')">
+  <div class="modal-box" onclick="event.stopPropagation()">
+    <div class="modal-hdr">
+      <h3>Add Class</h3>
+      <button class="modal-close" onclick="closeModal('modal-tt')">✕</button>
+    </div>
+    <form onsubmit="saveTTEntry(event)" style="padding:16px 20px;">
+      <div class="form-field"><label class="field-label">Subject *</label>
+        <input type="text" id="tt-subj" class="field-input" required/></div>
+      <div class="form-row">
+        <div class="form-field"><label class="field-label">Day *</label>
+          <select id="tt-day" class="field-input" required>
+            <option value="">Select</option>
+            <option>Monday</option><option>Tuesday</option><option>Wednesday</option>
+            <option>Thursday</option><option>Friday</option><option>Saturday</option>
+          </select></div>
+        <div class="form-field"><label class="field-label">Time</label>
+          <input type="text" id="tt-time" class="field-input" placeholder="9:00-10:00"/></div>
+      </div>
+      <div class="form-row">
+        <div class="form-field"><label class="field-label">Room</label>
+          <input type="text" id="tt-room" class="field-input" placeholder="A-301"/></div>
+        <div class="form-field"><label class="field-label">Type</label>
+          <select id="tt-type" class="field-input">
+            <option>Lecture</option><option>Lab</option><option>Tutorial</option>
+          </select></div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn-ghost" onclick="closeModal('modal-tt')">Cancel</button>
+        <button type="submit" class="btn-primary">Add</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<!-- Hidden file input for import -->
+<input type="file" id="import-file-input" accept=".json" style="display:none" onchange="importData(event)"/>
+
+<script src="app.js"></script>
+</body>
+</html>
