@@ -102,7 +102,6 @@ html, body {
   letter-spacing: -0.02em;
   color: var(--fg);
 }
-
 .theme-btn {
   display: inline-flex;
   align-items: center;
@@ -616,22 +615,79 @@ html, body {
 }
 .tt-room { font-size: 0.75rem; color: var(--muted-fg); }
 
-/* Profile */
-.profile-card {
-  background: var(--card); border: 1px solid var(--border);
-  border-radius: 12px; padding: 24px;
+/* ── New Profile page ── */
+.profile-page-wrap { max-width: 600px; margin: 0 auto; padding: 20px 16px; }
+
+.profile-hero {
+  background: linear-gradient(135deg, hsl(220 80% 20%), hsl(260 70% 25%));
+  border-radius: 18px; padding: 32px 24px;
   display: flex; align-items: center; gap: 20px;
   margin-bottom: 16px;
+  box-shadow: 0 8px 32px rgba(0,0,0,0.25);
 }
-.profile-avatar {
-  width: 72px; height: 72px; border-radius: 50%;
-  background: var(--muted); color: var(--muted-fg);
+.profile-avatar-lg {
+  width: 80px; height: 80px; border-radius: 50%;
+  background: rgba(255,255,255,0.15);
+  border: 2px solid rgba(255,255,255,0.3);
+  color: #fff; font-size: 1.75rem; font-weight: 800;
   display: flex; align-items: center; justify-content: center;
-  font-size: 1.5rem; font-weight: 700; flex-shrink: 0;
+  flex-shrink: 0; letter-spacing: -0.02em;
+  backdrop-filter: blur(8px);
 }
-.profile-name { font-size: 1.2rem; font-weight: 700; }
-.profile-id { font-size: 0.83rem; color: var(--muted-fg); margin-top: 2px; }
-.profile-inst { font-size: 0.78rem; color: var(--muted-fg); margin-top: 4px; }
+.profile-hero-text { flex: 1; min-width: 0; }
+.profile-hero-name { font-size: 1.3rem; font-weight: 800; color: #fff; letter-spacing: -0.02em; margin-bottom: 4px; }
+.profile-hero-enroll { font-size: 0.82rem; color: rgba(255,255,255,0.65); margin-bottom: 10px; }
+.profile-hero-badge {
+  display: inline-block; padding: 3px 12px;
+  background: rgba(255,255,255,0.15); border: 1px solid rgba(255,255,255,0.25);
+  border-radius: 99px; font-size: 0.72rem; font-weight: 600;
+  color: rgba(255,255,255,0.9); letter-spacing: 0.02em;
+}
+
+.profile-info-grid {
+  display: grid; grid-template-columns: 1fr 1fr;
+  gap: 10px; margin-bottom: 12px;
+}
+.profile-info-card {
+  background: var(--card); border: 1px solid var(--border);
+  border-radius: 12px; padding: 14px 16px;
+  display: flex; align-items: center; gap: 12px;
+  transition: border-color 0.15s, transform 0.15s;
+}
+.profile-info-card:hover { border-color: rgba(128,128,128,0.4); transform: translateY(-1px); }
+.profile-info-icon {
+  width: 36px; height: 36px; border-radius: 10px;
+  display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+}
+.profile-info-icon.blue   { background: rgba(59,130,246,0.12);  color: hsl(217 91% 60%); }
+.profile-info-icon.purple { background: rgba(139,92,246,0.12);  color: hsl(263 70% 60%); }
+.profile-info-icon.green  { background: rgba(34,197,94,0.12);   color: hsl(142 70% 45%); }
+.profile-info-icon.orange { background: rgba(245,158,11,0.12);  color: hsl(38 92% 50%); }
+.profile-info-body { min-width: 0; }
+.profile-info-label { font-size: 0.68rem; font-weight: 600; color: var(--muted-fg); text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 2px; }
+.profile-info-value { font-size: 0.95rem; font-weight: 700; color: var(--fg); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+
+.profile-inst-card {
+  background: var(--card); border: 1px solid var(--border);
+  border-radius: 12px; padding: 16px 18px;
+  display: flex; align-items: center; gap: 14px;
+  margin-bottom: 16px;
+}
+.profile-inst-logo { font-size: 2rem; flex-shrink: 0; }
+.profile-inst-name { font-size: 0.9rem; font-weight: 600; color: var(--fg); margin-bottom: 3px; }
+.profile-inst-loc { font-size: 0.75rem; color: var(--muted-fg); }
+
+.profile-logout-wrap { display: flex; justify-content: center; padding-top: 4px; }
+.btn-logout-clean {
+  display: inline-flex; align-items: center; gap: 8px;
+  padding: 10px 28px;
+  background: rgba(239,68,68,0.08); border: 1px solid rgba(239,68,68,0.25);
+  border-radius: 99px; color: hsl(0 84% 55%);
+  font-size: 0.875rem; font-weight: 600; font-family: inherit;
+  cursor: pointer; transition: background 0.15s, transform 0.15s;
+}
+.btn-logout-clean:hover { background: rgba(239,68,68,0.16); transform: translateY(-1px); }
+
 .profile-actions { display: flex; gap: 10px; }
 
 /* Buttons */

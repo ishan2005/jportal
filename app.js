@@ -292,15 +292,24 @@ function switchGpaTab(tab, btn) {
 ══════════════════════════════════════ */
 function updateProfileDisplay() {
   const p = state.profile;
-  const nameEl = document.querySelector('.profile-name');
-  const idEl   = document.getElementById('profile-enroll-id');
-  const avatar = document.getElementById('profile-avatar');
-  if (nameEl) nameEl.textContent = p.name || 'Student';
-  if (idEl)   idEl.textContent   = [p.enrollId, p.branch, p.section].filter(Boolean).join(' · ') || '--';
+  const name = p.name || 'Student';
+  const nameEl   = document.getElementById('profile-hero-name');
+  const enrollEl = document.getElementById('profile-hero-enroll');
+  const avatar   = document.getElementById('profile-avatar');
+  const branch   = document.getElementById('pi-branch');
+  const section  = document.getElementById('pi-section');
+  const batch    = document.getElementById('pi-batch');
+  const cgpa     = document.getElementById('pi-cgpa');
+  if (nameEl)   nameEl.textContent   = name;
+  if (enrollEl) enrollEl.textContent = p.enrollId || '992401030089';
   if (avatar) {
-    const initials = (p.name||'S').split(' ').map(w=>w[0]).join('').toUpperCase().slice(0,2);
+    const initials = name.split(' ').map(w=>w[0]).join('').toUpperCase().slice(0,2) || 'ST';
     avatar.textContent = initials;
   }
+  if (branch)  branch.textContent  = p.branch  || '—';
+  if (section) section.textContent = p.section || '—';
+  if (batch)   batch.textContent   = p.batch   || '—';
+  if (cgpa)    cgpa.textContent    = p.cgpa    || '—';
 }
 
 /* ══════════════════════════════════════
