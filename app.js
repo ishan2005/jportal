@@ -292,7 +292,7 @@ function switchGpaTab(tab, btn) {
    GRADES OVERVIEW (CGPA + SGPA)
 ══════════════════════════════════════ */
 function renderGradesOverview() {
-  // CGPA hero: prefer profile.cgpa, else calculate from cgpaSems
+  // CGPA hero
   const calcedCgpa = calcCGPA();
   const cgpaVal = state.profile.cgpa || (calcedCgpa !== null ? calcedCgpa.toFixed(2) : null);
   const cgpaEl  = document.getElementById('grades-cgpa-display');
@@ -305,17 +305,79 @@ function renderGradesOverview() {
     ring.style.strokeDashoffset = circumference * (1 - pct);
   }
 
-  // Semester rows: ONLY from cgpaSems (manual CGPA planner data)
-  const list = document.getElementById('grades-sgpa-list');
-  if (!list) return;
+  // Semester data from cgpaSems
   const cgpaSems = (state.cgpaSems || []).map((s,i)=>({...s,idx:i})).filter(s=>s.g && !isNaN(parseFloat(s.g)));
 
+  // Render chart
+  renderSgpaChart(cgpaSems);
+
+  // Semester rows
+  const list = document.getElementById('grades-sgpa-list');
+  if (!list) return;
   if (!cgpaSems.length) {
     list.innerHTML = '<div class="empty-state"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" width="40" height="40"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg><p>No semester GPA data available.</p></div>';
     return;
   }
-
   list.innerHTML = cgpaSems.map(s=>`<div class="sgpa-sem-row"><div><div class="sgpa-sem-name">Semester ${s.idx+1}</div><div class="sgpa-sem-credits">${s.c ? parseFloat(s.c)+' credits' : ''}</div></div><div class="sgpa-sem-score">${parseFloat(s.g).toFixed(2)}</div></div>`).join('');
+}
+
+function renderSgpaChart(sems) {
+  const wrap = document.getElementById('grades-gpa-chart');
+  if (!wrap) return;
+  if (!sems.length) { wrap.innerHTML = ''; return; }
+
+  const W = 400, H = 140, padL = 28, padR = 16, padT = 28, padB = 30;
+  const chartW = W - padL - padR, chartH = H - padT - padB;
+  const vals = sems.map(s => parseFloat(s.g));
+  const minV = Math.max(0, Math.min(...vals) - 0.5);
+  const maxV = Math.min(10, Math.max(...vals) + 0.5);
+  const xStep = sems.length > 1 ? chartW / (sems.length - 1) : chartW / 2;
+
+  const toX = i  => padL + (sems.length > 1 ? i * xStep : chartW / 2);
+  const toY = v  => padT + chartH - ((v - minV) / (maxV - minV)) * chartH;
+
+  // Grid lines at 3 levels
+  const gridVals = [minV, (minV+maxV)/2, maxV].map(v => Math.round(v*10)/10);
+  let gridSvg = gridVals.map(v => {
+    const y = toY(v);
+    return `<line class="gpa-chart-gridline" x1="${padL}" y1="${y}" x2="${W-padR}" y2="${y}"/>
+            <text x="${padL-4}" y="${y+3}" font-size="8" fill="var(--muted-fg)" text-anchor="end">${v.toFixed(1)}</text>`;
+  }).join('');
+
+  // Path points
+  const pts = sems.map((s,i) => `${toX(i)},${toY(parseFloat(s.g))}`).join(' ');
+  const firstX = toX(0), lastX = toX(sems.length-1);
+  const areaPath = `M${firstX},${toY(vals[0])} ` +
+    sems.map((s,i)=>`L${toX(i)},${toY(parseFloat(s.g))}`).join(' ') +
+    ` L${lastX},${padT+chartH} L${firstX},${padT+chartH} Z`;
+
+  // Dots + labels
+  const dots = sems.map((s,i) => {
+    const x = toX(i), y = toY(parseFloat(s.g));
+    const delay = 0.4 + i * 0.12;
+    return `<circle class="gpa-chart-dot" cx="${x}" cy="${y}" r="4.5" style="animation-delay:${delay}s;transform-origin:${x}px ${y}px"/>
+            <text class="gpa-chart-label" x="${x}" y="${y-9}" style="animation-delay:${delay+0.1}s">${parseFloat(s.g).toFixed(2)}</text>
+            <text class="gpa-chart-sem-label" x="${x}" y="${padT+chartH+14}">Sem ${s.idx+1}</text>`;
+  }).join('');
+
+  wrap.innerHTML = `
+    <div class="gpa-chart-title">Semester-wise SGPA Trend</div>
+    <svg class="gpa-chart-svg" viewBox="0 0 ${W} ${H}" preserveAspectRatio="xMidYMid meet">
+      <defs>
+        <linearGradient id="lineGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+          <stop offset="0%"   stop-color="hsl(220 80% 60%)"/>
+          <stop offset="100%" stop-color="hsl(260 70% 65%)"/>
+        </linearGradient>
+        <linearGradient id="areaGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+          <stop offset="0%"   stop-color="hsl(220 80% 60%)" stop-opacity="0.25"/>
+          <stop offset="100%" stop-color="hsl(220 80% 60%)" stop-opacity="0"/>
+        </linearGradient>
+      </defs>
+      ${gridSvg}
+      <path class="gpa-chart-area" d="${areaPath}" fill="url(#areaGrad)"/>
+      <polyline class="gpa-chart-line" points="${pts}"/>
+      ${dots}
+    </svg>`;
 }
 
 /* ══════════════════════════════════════
