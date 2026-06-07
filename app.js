@@ -1,4 +1,4 @@
-/* ═══════════════════════════════════════
+﻿/* ═══════════════════════════════════════
    JP Portal — app.js  (GitHub Gist DB)
    Serverless: GitHub Pages + Gist storage
    Hidden master data entry: click "JP Portal"
@@ -292,39 +292,39 @@ function switchGpaTab(tab, btn) {
    GRADES OVERVIEW (CGPA + SGPA)
 ══════════════════════════════════════ */
 function renderGradesOverview() {
-  // CGPA from profile
-  const cgpaVal = state.profile.cgpa;
+  // CGPA hero: prefer profile.cgpa, else calculate from cgpaSems
+  const calcedCgpa = calcCGPA();
+  const cgpaVal = state.profile.cgpa || (calcedCgpa !== null ? calcedCgpa.toFixed(2) : null);
   const cgpaEl  = document.getElementById('grades-cgpa-display');
   const ring    = document.getElementById('grades-cgpa-ring');
-  if (cgpaEl) cgpaEl.textContent = cgpaVal ? parseFloat(cgpaVal).toFixed(2) : '—';
+  if (cgpaEl) cgpaEl.textContent = cgpaVal ? parseFloat(cgpaVal).toFixed(2) : '-';
   if (ring && cgpaVal) {
-    const pct = Math.min(parseFloat(cgpaVal) / 10, 1);
     const circumference = 2 * Math.PI * 15.9;
+    const pct = Math.min(parseFloat(cgpaVal) / 10, 1);
     ring.style.strokeDasharray = circumference;
     ring.style.strokeDashoffset = circumference * (1 - pct);
   }
 
-  // Per-semester SGPA from gpaSems
+  // Semester rows: cgpaSems = [{g: sgpa, c: credits}, ...]
   const list = document.getElementById('grades-sgpa-list');
   if (!list) return;
-  if (!state.gpaSems || !state.gpaSems.length) {
-    list.innerHTML = `<div class="empty-state">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" width="40" height="40"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>
-      <p>No semester GPA data available.</p>
-    </div>`;
+  const cgpaSems   = (state.cgpaSems || []).map((s,i)=>({...s,idx:i})).filter(s=>s.g && !isNaN(parseFloat(s.g)));
+  const gpaSemRows = (state.gpaSems  || []).filter(s=>s.subjects && s.subjects.length > 0);
+
+  if (!cgpaSems.length && !gpaSemRows.length) {
+    list.innerHTML = '<div class="empty-state"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" width="40" height="40"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg><p>No semester GPA data available.</p></div>';
     return;
   }
-  list.innerHTML = state.gpaSems.map(sem => {
-    const sgpa = calcSGPA(sem.subjects);
-    const totalCr = (sem.subjects||[]).reduce((a,s)=>a+(parseFloat(s.credits)||0),0);
-    return `<div class="sgpa-sem-row">
-      <div>
-        <div class="sgpa-sem-name">${escHtml(sem.name)}</div>
-        <div class="sgpa-sem-credits">${totalCr > 0 ? totalCr + ' credits' : 'No subjects yet'}</div>
-      </div>
-      <div class="sgpa-sem-score">${sgpa !== null ? sgpa.toFixed(2) : '—'}</div>
-    </div>`;
+
+  let html = cgpaSems.map(s=>`<div class="sgpa-sem-row"><div><div class="sgpa-sem-name">Semester ${s.idx+1}</div><div class="sgpa-sem-credits">${s.c ? parseFloat(s.c)+' credits' : ''}</div></div><div class="sgpa-sem-score">${parseFloat(s.g).toFixed(2)}</div></div>`).join('');
+
+  html += gpaSemRows.map(sem=>{
+    const sgpa=calcSGPA(sem.subjects);
+    const cr=(sem.subjects||[]).reduce((a,s)=>a+(parseFloat(s.credits)||0),0);
+    return `<div class="sgpa-sem-row"><div><div class="sgpa-sem-name">${escHtml(sem.name)}</div><div class="sgpa-sem-credits">${cr>0?cr+' credits':''}</div></div><div class="sgpa-sem-score">${sgpa!==null?sgpa.toFixed(2):'-'}</div></div>`;
   }).join('');
+
+  list.innerHTML = html;
 }
 
 /* ══════════════════════════════════════
