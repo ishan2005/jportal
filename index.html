@@ -224,16 +224,68 @@
 
     <!-- ── GRADES ── -->
     <div id="page-grades" class="content-page hidden">
-      <div class="content-section">
-        <div class="section-header">
-          <h2 class="section-title">Grades & Marks</h2>
-        </div>
-        <div id="marks-list">
-          <div class="empty-state">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" width="40" height="40"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>
-            <p>No grade records found.</p>
+      <div style="max-width:900px;margin:0 auto;padding:12px;">
+
+        <!-- Tabs -->
+        <div class="tabs-bar">
+          <div class="tabs-list grid2">
+            <button class="tab-trigger active" onclick="switchTab('grades','gpa-overview',this)">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16"><circle cx="12" cy="8" r="6"/><path d="M15.477 12.89 17 22l-5-3-5 3 1.523-9.11"/></svg>
+              GPA Overview
+            </button>
+            <button class="tab-trigger" onclick="switchTab('grades','subject-marks',this)">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>
+              Subject Marks
+            </button>
           </div>
         </div>
+
+        <!-- GPA OVERVIEW TAB -->
+        <div id="grades-gpa-overview" class="tab-content active" style="padding-top:16px;">
+
+          <!-- CGPA Hero Card -->
+          <div class="cgpa-hero-card">
+            <div class="cgpa-hero-left">
+              <div class="cgpa-hero-label">Overall CGPA</div>
+              <div class="cgpa-hero-value" id="grades-cgpa-display">—</div>
+              <div class="cgpa-hero-sub">Cumulative Grade Point Average</div>
+            </div>
+            <div class="cgpa-hero-right">
+              <svg viewBox="0 0 36 36" width="90" height="90">
+                <circle cx="18" cy="18" r="15.9" fill="none" stroke="var(--border)" stroke-width="3"/>
+                <circle cx="18" cy="18" r="15.9" fill="none" stroke="url(#cgpaGrad)" stroke-width="3"
+                  stroke-dasharray="100" stroke-dashoffset="0"
+                  id="grades-cgpa-ring" stroke-linecap="round"
+                  transform="rotate(-90 18 18)"/>
+                <defs>
+                  <linearGradient id="cgpaGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+                    <stop offset="0%" stop-color="hsl(220 80% 55%)"/>
+                    <stop offset="100%" stop-color="hsl(260 70% 60%)"/>
+                  </linearGradient>
+                </defs>
+              </svg>
+            </div>
+          </div>
+
+          <!-- Per-semester SGPA list -->
+          <div id="grades-sgpa-list" style="margin-top:12px;">
+            <div class="empty-state">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" width="40" height="40"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>
+              <p>No semester GPA data available.</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- SUBJECT MARKS TAB -->
+        <div id="grades-subject-marks" class="tab-content hidden" style="padding-top:16px;">
+          <div id="marks-list">
+            <div class="empty-state">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" width="40" height="40"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>
+              <p>No grade records found.</p>
+            </div>
+          </div>
+        </div>
+
       </div>
       <div style="height:80px"></div>
     </div>

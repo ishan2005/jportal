@@ -690,6 +690,37 @@ html, body {
 
 .profile-actions { display: flex; gap: 10px; }
 
+/* ── CGPA Hero Card ── */
+.cgpa-hero-card {
+  background: linear-gradient(135deg, hsl(220 80% 18%), hsl(260 70% 22%));
+  border-radius: 16px; padding: 24px 28px;
+  display: flex; align-items: center; justify-content: space-between;
+  gap: 16px; margin-bottom: 8px;
+  box-shadow: 0 8px 32px rgba(0,0,0,0.25);
+}
+.cgpa-hero-left { flex: 1; }
+.cgpa-hero-label { font-size: 0.72rem; font-weight: 700; text-transform: uppercase;
+  letter-spacing: 0.1em; color: rgba(255,255,255,0.55); margin-bottom: 8px; }
+.cgpa-hero-value { font-size: 3.5rem; font-weight: 900; color: #fff;
+  letter-spacing: -0.04em; line-height: 1; margin-bottom: 6px; }
+.cgpa-hero-sub { font-size: 0.78rem; color: rgba(255,255,255,0.5); }
+.cgpa-hero-right { flex-shrink: 0; opacity: 0.85; }
+.sgpa-sem-row {
+  background: var(--card); border: 1px solid var(--border);
+  border-radius: 10px; padding: 14px 18px;
+  display: flex; align-items: center; justify-content: space-between;
+  gap: 12px; margin-bottom: 8px; transition: border-color 0.15s;
+}
+.sgpa-sem-row:hover { border-color: rgba(128,128,128,0.4); }
+.sgpa-sem-name { font-size: 0.875rem; font-weight: 600; color: var(--fg); }
+.sgpa-sem-credits { font-size: 0.75rem; color: var(--muted-fg); margin-top: 2px; }
+.sgpa-sem-score {
+  font-size: 1.6rem; font-weight: 800;
+  background: linear-gradient(135deg, hsl(220 80% 60%), hsl(260 70% 65%));
+  -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+  background-clip: text; flex-shrink: 0;
+}
+
 /* Buttons */
 .btn-primary {
   padding: 8px 18px; background: var(--primary); color: var(--primary-fg);
