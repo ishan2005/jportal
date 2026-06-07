@@ -178,10 +178,6 @@
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16"><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><line x1="3" y1="6" x2="3.01" y2="6"/><line x1="3" y1="12" x2="3.01" y2="12"/><line x1="3" y1="18" x2="3.01" y2="18"/></svg>
           <span class="toolbar-btn-label" id="sort-label">Default</span>
         </button>
-        <button class="toolbar-btn" onclick="openAddAttModal()" title="Add Subject">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
-          <span class="toolbar-btn-label">Add</span>
-        </button>
       </div>
 
       <!-- Tabs -->
@@ -202,7 +198,7 @@
         <div class="card-grid-2" id="att-cards-grid">
           <div class="empty-state">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" width="40" height="40"><polyline points="9 11 12 14 22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>
-            <p>No attendance data yet. Click <b>Add</b> to add subjects.</p>
+            <p>No attendance records found.</p>
           </div>
         </div>
       </div>
@@ -231,15 +227,11 @@
       <div class="content-section">
         <div class="section-header">
           <h2 class="section-title">Grades & Marks</h2>
-          <button class="btn-outline" onclick="openAddMarksModal()">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
-            Add Marks
-          </button>
         </div>
         <div id="marks-list">
           <div class="empty-state">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" width="40" height="40"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>
-            <p>No grades added yet. Click <b>Add Marks</b> to get started.</p>
+            <p>No grade records found.</p>
           </div>
         </div>
       </div>
@@ -269,17 +261,12 @@
               <select class="toolbar-select" id="sgpa-sem-select" onchange="onSgpaSemChange()" style="max-width:280px;">
                 <option value="">Choose your semester</option>
               </select>
-              <button class="btn-outline" onclick="openAddSemModal()">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="14" height="14"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
-                Add Semester
-              </button>
             </div>
 
             <div class="card-grid-2" id="sgpa-subjects-grid">
               <div class="empty-state" style="grid-column:1/-1;">
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" width="40" height="40"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>
-                <p>Add a semester and subjects to calculate SGPA.</p>
-                <button class="btn-outline" onclick="openAddSemModal()">Add Semester</button>
+                <p>No semester data available.</p>
               </div>
             </div>
 
@@ -341,10 +328,6 @@
             </div>
 
             <div style="display:flex;flex-wrap:wrap;gap:12px;align-items:center;margin-top:8px;">
-              <button class="btn-outline" onclick="addCgpaSemRow()" id="add-sem-btn">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
-                Add Semester
-              </button>
               <div class="result-card" style="flex:1;min-width:200px;">
                 <div class="result-card-left">
                   <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16"><circle cx="12" cy="8" r="6"/><path d="M15.477 12.89 17 22l-5-3-5 3 1.523-9.11"/></svg>
@@ -364,15 +347,11 @@
       <div class="content-section">
         <div class="section-header">
           <h2 class="section-title">Exam Schedule</h2>
-          <button class="btn-outline" onclick="openAddExamModal()">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
-            Add Exam
-          </button>
         </div>
         <div id="exams-list">
           <div class="empty-state">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" width="40" height="40"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/></svg>
-            <p>No exam schedule added yet.</p>
+            <p>No exam schedule available.</p>
           </div>
         </div>
       </div>
@@ -384,15 +363,11 @@
       <div class="content-section">
         <div class="section-header">
           <h2 class="section-title">Registered Subjects</h2>
-          <button class="btn-outline" onclick="openAddSubjectModal()">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
-            Add Subject
-          </button>
         </div>
         <div id="subjects-list">
           <div class="empty-state">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" width="40" height="40"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>
-            <p>No subjects added yet.</p>
+            <p>No subjects registered.</p>
           </div>
         </div>
       </div>
@@ -404,15 +379,11 @@
       <div class="content-section">
         <div class="section-header">
           <h2 class="section-title">Weekly Timetable</h2>
-          <button class="btn-outline" onclick="openAddTTModal()">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
-            Add Class
-          </button>
         </div>
         <div id="tt-grid">
           <div class="empty-state">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" width="40" height="40"><rect x="3" y="4" width="18" height="18" rx="2"/></svg>
-            <p>No timetable entries yet.</p>
+            <p>No timetable available.</p>
           </div>
         </div>
       </div>

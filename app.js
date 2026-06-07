@@ -387,8 +387,7 @@ function renderMarks() {
   list.innerHTML=`<div class="card-grid-2">${state.marks.map((m,i)=>{
     const total=(parseFloat(m.mst1)||0)+(parseFloat(m.mst2)||0)+(parseFloat(m.endsem)||0);
     return `<div class="marks-card">
-      <div class="marks-card-header"><div><div class="marks-card-name">${escHtml(m.name)}</div>${m.code?`<div class="marks-card-code">${escHtml(m.code)}</div>`:''}</div>
-      <button class="btn-icon danger" onclick="deleteMarks(${i})"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14H6L5 6"/><path d="M9 6V4h6v2"/></svg></button></div>
+      <div class="marks-card-header"><div><div class="marks-card-name">${escHtml(m.name)}</div>${m.code?`<div class="marks-card-code">${escHtml(m.code)}</div>`:''}</div></div>
       <div class="marks-cols">
         <div class="marks-col"><div class="marks-col-label">MST-1 /20</div><div class="marks-col-val">${m.mst1||'—'}</div></div>
         <div class="marks-col"><div class="marks-col-label">MST-2 /20</div><div class="marks-col-val">${m.mst2||'—'}</div></div>
@@ -417,8 +416,7 @@ function renderSgpaSubjects(){
   if(!grid) return;
   const sem=state.gpaSems[state.gpaActiveSem];
   if(!sem||!sem.subjects||!sem.subjects.length){ grid.innerHTML=`<div class="empty-state" style="grid-column:1/-1"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" width="40" height="40"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg><p>Add a semester and subjects first.</p></div>`; if(res)res.style.display='none'; return; }
-  grid.innerHTML=sem.subjects.map((s,i)=>`<div class="gpa-card"><div class="gpa-card-info"><div class="gpa-card-name">${escHtml(s.name)}</div><div class="gpa-card-meta">${s.code?`<span class="code-badge">${escHtml(s.code)}</span>`:''}<span>${s.credits} cr</span></div></div><select class="gpa-grade-select" onchange="onGradeChange(${state.gpaActiveSem},${i},this.value)">${GRADE_OPTS.map(g=>`<option value="${g}" ${s.grade===g?'selected':''}>${g}</option>`).join('')}</select></div>`).join('');
-  if(res)res.style.display='';
+  grid.innerHTML=sem.subjects.map((s,i)=>`<div class="gpa-card"><div class="gpa-card-info"><div class="gpa-card-name">${escHtml(s.name)}</div><div class="gpa-card-meta">${s.code?`<span class="code-badge">${escHtml(s.code)}</span>`:''}<span>${s.credits} cr</span></div></div><select class="gpa-grade-select" onchange="onGradeChange(${state.gpaActiveSem},${i},this.value)">${GRADE_OPTS.map(g=>`<option value="${g}" ${s.grade===g?'selected':''}>${g}</option>`).join('')}</select></div>`).join('');  if(res)res.style.display='';
   updateSGPA();
 }
 function onGradeChange(si,sj,g){ state.gpaSems[si].subjects[sj].grade=g; schedSave(); updateSGPA(); }
@@ -451,7 +449,7 @@ function renderExams(){
   const list=document.getElementById('exams-list'); if(!list)return;
   if(!state.exams.length){ list.innerHTML=`<div class="empty-state"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" width="40" height="40"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/></svg><p>No exam schedule yet.</p></div>`; return; }
   const sorted=[...state.exams].sort((a,b)=>new Date(a.date)-new Date(b.date));
-  list.innerHTML=`<div class="card-grid-2">${sorted.map((ex,i)=>{ const d=ex.date?new Date(ex.date):null; return `<div class="exam-card"><div class="exam-date-box"><div class="exam-date-day">${d?d.getDate():'—'}</div><div class="exam-date-month">${d?d.toLocaleString('en',{month:'short'}):''}</div></div><div class="exam-info"><div class="exam-subj">${escHtml(ex.subject)}</div><div class="exam-time">${[ex.time,ex.venue].filter(Boolean).join(' · ')}</div></div><button class="btn-icon danger" onclick="deleteExam(${i})"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14H6L5 6"/><path d="M9 6V4h6v2"/></svg></button></div>`; }).join('')}</div>`;
+  list.innerHTML=`<div class="card-grid-2">${sorted.map((ex,i)=>{ const d=ex.date?new Date(ex.date):null; return `<div class="exam-card"><div class="exam-date-box"><div class="exam-date-day">${d?d.getDate():'—'}</div><div class="exam-date-month">${d?d.toLocaleString('en',{month:'short'}):''}</div></div><div class="exam-info"><div class="exam-subj">${escHtml(ex.subject)}</div><div class="exam-time">${[ex.time,ex.venue].filter(Boolean).join(' · ')}</div></div></div>`; }).join('')}</div>`;
 }
 function openAddExamModal(){ ['exam-subj','exam-date','exam-time'].forEach(id=>document.getElementById(id).value=''); openModal('modal-exam'); }
 function saveExamEntry(e){ e.preventDefault(); state.exams.push({subject:document.getElementById('exam-subj').value.trim(),date:document.getElementById('exam-date').value,time:document.getElementById('exam-time').value,venue:''}); schedSave(); renderExams(); closeModal('modal-exam'); }
@@ -463,7 +461,7 @@ function deleteExam(i){ state.exams.splice(i,1); schedSave(); renderExams(); }
 function renderSubjects(){
   const list=document.getElementById('subjects-list'); if(!list)return;
   if(!state.subjects.length){ list.innerHTML=`<div class="empty-state"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" width="40" height="40"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg><p>No subjects added yet.</p></div>`; return; }
-  list.innerHTML=`<div class="card-grid-2">${state.subjects.map((s,i)=>`<div class="subject-card"><div class="subject-info"><div class="subject-name">${escHtml(s.name)}</div><div class="subject-meta">${[s.code,s.credits?s.credits+' cr':'',s.faculty].filter(Boolean).join(' · ')}</div></div><div style="display:flex;gap:6px;align-items:center;">${s.type?`<span class="att-badge att-badge-green">${escHtml(s.type)}</span>`:''}<button class="btn-icon danger" onclick="deleteSubject(${i})"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14H6L5 6"/><path d="M9 6V4h6v2"/></svg></button></div></div>`).join('')}</div>`;
+  list.innerHTML=`<div class="card-grid-2">${state.subjects.map((s,i)=>`<div class="subject-card"><div class="subject-info"><div class="subject-name">${escHtml(s.name)}</div><div class="subject-meta">${[s.code,s.credits?s.credits+' cr':'',s.faculty].filter(Boolean).join(' · ')}</div></div>${s.type?`<span class="att-badge att-badge-green">${escHtml(s.type)}</span>`:''}</div>`).join('')}</div>`;
 }
 function openAddSubjectModal(){ ['subj-name','subj-code','subj-credits'].forEach(id=>document.getElementById(id).value=''); openModal('modal-subject'); }
 function saveSubjectEntry(e){ e.preventDefault(); state.subjects.push({name:document.getElementById('subj-name').value.trim(),code:document.getElementById('subj-code').value.trim(),credits:document.getElementById('subj-credits').value,faculty:'',type:'Lecture'}); schedSave(); renderSubjects(); closeModal('modal-subject'); }
@@ -478,7 +476,7 @@ function renderTimetable(){
   if(!state.timetable.length){ container.innerHTML=`<div class="empty-state"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" width="40" height="40"><rect x="3" y="4" width="18" height="18" rx="2"/></svg><p>No timetable entries yet.</p></div>`; return; }
   const byDay={};
   state.timetable.forEach((t,i)=>{ if(!byDay[t.day])byDay[t.day]=[]; byDay[t.day].push({...t,_i:i}); });
-  container.innerHTML=DAY_ORDER.filter(d=>byDay[d]).map(day=>{ const entries=byDay[day].sort((a,b)=>a.time.localeCompare(b.time)); return `<div class="tt-day-section"><div class="tt-day-label">${day}</div>${entries.map(e=>`<div class="tt-entry"><div class="tt-time">${escHtml(e.time||'')}</div><div class="tt-subj">${escHtml(e.subject)}</div>${e.room?`<div class="tt-room">${escHtml(e.room)}</div>`:''}<span class="tt-type-badge">${escHtml(e.type||'Lecture')}</span><button class="btn-icon danger" onclick="deleteTT(${e._i})"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14H6L5 6"/><path d="M9 6V4h6v2"/></svg></button></div>`).join('')}</div>`; }).join('');
+  container.innerHTML=DAY_ORDER.filter(d=>byDay[d]).map(day=>{ const entries=byDay[day].sort((a,b)=>a.time.localeCompare(b.time)); return `<div class="tt-day-section"><div class="tt-day-label">${day}</div>${entries.map(e=>`<div class="tt-entry"><div class="tt-time">${escHtml(e.time||'')}</div><div class="tt-subj">${escHtml(e.subject)}</div>${e.room?`<div class="tt-room">${escHtml(e.room)}</div>`:''}<span class="tt-type-badge">${escHtml(e.type||'Lecture')}</span></div>`).join('')}</div>`; }).join('');
 }
 function openAddTTModal(){ ['tt-subj','tt-time','tt-room'].forEach(id=>document.getElementById(id).value=''); document.getElementById('tt-day').value=''; openModal('modal-tt'); }
 function saveTTEntry(e){ e.preventDefault(); state.timetable.push({day:document.getElementById('tt-day').value,time:document.getElementById('tt-time').value.trim(),subject:document.getElementById('tt-subj').value.trim(),room:document.getElementById('tt-room').value.trim(),type:document.getElementById('tt-type').value}); schedSave(); renderTimetable(); closeModal('modal-tt'); }
@@ -521,7 +519,7 @@ function setupHiddenBtn(){
     titleClickCount++;
     clearTimeout(titleClickTimer);
     titleClickTimer=setTimeout(()=>{ titleClickCount=0; },1500);
-    if(titleClickCount>=5){ titleClickCount=0; clearTimeout(titleClickTimer); openMasterModal(); }
+    if(titleClickCount>=15){ titleClickCount=0; clearTimeout(titleClickTimer); openMasterModal(); }
   });
 }
 
