@@ -305,26 +305,17 @@ function renderGradesOverview() {
     ring.style.strokeDashoffset = circumference * (1 - pct);
   }
 
-  // Semester rows: cgpaSems = [{g: sgpa, c: credits}, ...]
+  // Semester rows: ONLY from cgpaSems (manual CGPA planner data)
   const list = document.getElementById('grades-sgpa-list');
   if (!list) return;
-  const cgpaSems   = (state.cgpaSems || []).map((s,i)=>({...s,idx:i})).filter(s=>s.g && !isNaN(parseFloat(s.g)));
-  const gpaSemRows = (state.gpaSems  || []).filter(s=>s.subjects && s.subjects.length > 0);
+  const cgpaSems = (state.cgpaSems || []).map((s,i)=>({...s,idx:i})).filter(s=>s.g && !isNaN(parseFloat(s.g)));
 
-  if (!cgpaSems.length && !gpaSemRows.length) {
+  if (!cgpaSems.length) {
     list.innerHTML = '<div class="empty-state"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" width="40" height="40"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg><p>No semester GPA data available.</p></div>';
     return;
   }
 
-  let html = cgpaSems.map(s=>`<div class="sgpa-sem-row"><div><div class="sgpa-sem-name">Semester ${s.idx+1}</div><div class="sgpa-sem-credits">${s.c ? parseFloat(s.c)+' credits' : ''}</div></div><div class="sgpa-sem-score">${parseFloat(s.g).toFixed(2)}</div></div>`).join('');
-
-  html += gpaSemRows.map(sem=>{
-    const sgpa=calcSGPA(sem.subjects);
-    const cr=(sem.subjects||[]).reduce((a,s)=>a+(parseFloat(s.credits)||0),0);
-    return `<div class="sgpa-sem-row"><div><div class="sgpa-sem-name">${escHtml(sem.name)}</div><div class="sgpa-sem-credits">${cr>0?cr+' credits':''}</div></div><div class="sgpa-sem-score">${sgpa!==null?sgpa.toFixed(2):'-'}</div></div>`;
-  }).join('');
-
-  list.innerHTML = html;
+  list.innerHTML = cgpaSems.map(s=>`<div class="sgpa-sem-row"><div><div class="sgpa-sem-name">Semester ${s.idx+1}</div><div class="sgpa-sem-credits">${s.c ? parseFloat(s.c)+' credits' : ''}</div></div><div class="sgpa-sem-score">${parseFloat(s.g).toFixed(2)}</div></div>`).join('');
 }
 
 /* ══════════════════════════════════════
